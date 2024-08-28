@@ -1,0 +1,8 @@
+version: v2
+plugins:
+  - remote: buf.build/protocolbuffers/go:v1.34.2
+    out: .
+    opt: paths=import,module=github.com/daemonl/pvbug
+
+inputs:
+  - directory: .
