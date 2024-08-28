@@ -17,7 +17,7 @@ func mustFailValidate(t *testing.T, msg proto.Message) {
 
 	err = pv.Validate(msg)
 	if err == nil {
-		t.Errorf("First Validation should have failed")
+		t.Errorf("Fresh Validation should have failed")
 	}
 }
 
@@ -45,8 +45,10 @@ func TestLocalJ5(t *testing.T) {
 
 	t.Run("Value by itself", func(t *testing.T) {
 		obj := invalidObject()
-		mustFailValidate(t, obj)
+
+		// Both Correctly Fail Validation
 		mustFailWarmedUp(t, warmedUp, obj)
+		mustFailValidate(t, obj)
 	})
 
 	t.Run("Wrapped in order 1 2", func(t *testing.T) {
@@ -54,8 +56,10 @@ func TestLocalJ5(t *testing.T) {
 		oneTwo := &test_pb.OneTwo{
 			Field1: obj,
 		}
-		mustFailValidate(t, oneTwo)
+
+		// Both Correctly Fail Validation
 		mustFailWarmedUp(t, warmedUp, obj)
+		mustFailValidate(t, oneTwo)
 	})
 
 	t.Run("Wrapped in order 2 1", func(t *testing.T) {
@@ -63,7 +67,11 @@ func TestLocalJ5(t *testing.T) {
 		twoOne := &test_pb.TwoOne{
 			Field1: obj,
 		}
-		mustFailValidate(t, twoOne)
+
+		// Correctly fails validation
 		mustFailWarmedUp(t, warmedUp, obj)
+
+		// Does not fail validation
+		mustFailValidate(t, twoOne)
 	})
 }
